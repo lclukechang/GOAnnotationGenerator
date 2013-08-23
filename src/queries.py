@@ -28,5 +28,15 @@ FROM gene_product
 WHERE
  term.name='%s' AND species.species='sapiens';"""
 
+unannotated_genes = """PRAGMA temp_store=2;
+create temp table temp2 (node_id int, symbol text);
+insert into temp2 (node_id) select distinct (node_id) from degrees where node_id not in (select node_id from gene_annos);
 
+update temp2 set symbol = (select  identifiers.symbol from identifiers where identifiers.node_id = temp2.node_id and identifiers.source = 'Gene Name')  where symbol is null;
+update temp2 set symbol = (select identifiers.symbol from identifiers where identifiers.node_id = temp2.node_id and identifiers.source = 'Ensembl Gene Name')  where symbol is null;
+update temp2 set symbol = (select identifiers.symbol from identifiers where identifiers.node_id = temp2.node_id and identifiers.source = 'Ensembl Gene ID') where symbol is null;
+update temp2 set symbol = (select identifiers.symbol from identifiers where identifiers.node_id = temp2.node_id and identifiers.source = 'Entrez Gene ID') where symbol is null;
 
+.sep "\t"
+select symbol, '+', symbol from temp2;
+"""

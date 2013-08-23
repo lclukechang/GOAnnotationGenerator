@@ -8,7 +8,6 @@
 # 
 # Bader Lab @ The University of Toronto
 ##########################################################################
-import sys
 import os
 
 from helpers import *
@@ -22,6 +21,10 @@ class GO_Term:
         self.file_name = name.replace(" ", "_").replace("/", "OR")
         self.acc = acc
         self.branch = branch
+        self.pred_value = None
+        self.queryset = None
+        self.querypath = None
+        self.pred_path = None
 
     def __unicode__(self):
         return unicode(self.name)
@@ -29,33 +32,34 @@ class GO_Term:
     def __str__(self):
         return self.name
 
-    def retrieve_queryset(self, species):
-        queries = execute_sql(basequery % (self.sql_name, "sapiens"))
+    def retrieve_queryset(self):
+        queries = execute_sql(basequery % self.sql_name)
         self.queryset = QuerySet(queries)
         self.queryset.sanitize()
 
-    def create_queryfile(cachepath):
+    def create_queryfile(self, cachepath):
         self.querypath = os.path.join(cachepath, "%s.query" % 
             self.file_name)
-        f = open(querypath, 'w')
-        content = ["H. Sapiens", self.queryset.string(), networks, '100',
-            weighting]
+        f = open(self.querypath, 'w')
+        content = ["H. Sapiens", "\t".join(self.queryset.members), 
+            networks, '100', weighting]
         f.write("\n".join(content))
         f.close()
         self.pred_path = self.querypath + "-results.scores.txt"
 
 class QuerySet:
     def __init__(self, members):
-        self.members = list(set(members))
+        self.members = list(set(strip_unary_tuple(members)))
         self.sanitation = False
 
     def sanitize(self):
         if not self.sanitation:
-            sanitized, unrecognized = sanitize_split(self.queryset)
+            sanitized, unrecognized = sanitize_split(self.members)
             #TODO: log errors
-            converted, errors = ensemblmapper(unrecognized, 
-                "homo_sapiens")
-            self.queryset = sanitized + converted
+            if unrecognized:
+                converted, errors = ensemblmapper(unrecognized, 
+                    "homo_sapiens")
+                self.members = sanitized + converted 
             self.sanitation = True
 
 class Prediction:
@@ -63,7 +67,5 @@ class Prediction:
         self.term = term
         self.gene = gene
         self.querycount = count
-        # Init confidence score to be none
-        self.ci = None
-
-
+        # Init confidence score to be none.
+        self.score = None
