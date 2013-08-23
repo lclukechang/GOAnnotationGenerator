@@ -9,16 +9,19 @@
 # 
 # Bader Lab @ The University of Toronto
 ##########################################################################
-    
+
     ##
     # NOTE: Please use ABSOLUTE paths in this settings file!
    ##
 
+# Define a GO database connection to use for MySQL queries.
+
+
 # Path to the GeneMANIA JVM JAR file (command-line tools)
-jar = "/Users/lukechang/dev/dependencies/cmd.jar"
+jar = "/Users/luke/dev/baderlab/dependencies/cmd.jar"
 
 # Path to a GeneMANIA network dataset to use for predictions
-data = "/Users/lukechang/dev/dependencies/datasource"
+data = "/Users/luke/dev/baderlab/dependencies/datasource"
 
 # Amount of memory to allocate JVM when executing GeneMANIA tools
 mem = "-Xmx2500m"
@@ -27,14 +30,14 @@ mem = "-Xmx2500m"
 threads = "2"
 
 # Provide a path to store intermediate query files during runtime
-querycache = "/Users/lukechang/dev/GOAnnotationGenerator/.querycache"
+querycache = "/Users/luke/dev/baderlab/OAnnotationGenerator/.querycache"
 
 # Provide a path to store intermediate score files during runtime
 # NOTE: This cannot be identical to the querycache path!
-scorecache = "/Users/lukechang/dev/GOAnnotationGenerator/.scorecache"
+scorecache = "/Users/luke/dev/baderlab/OAnnotationGenerator/.scorecache"
 
 # Provide a path to store log files
-log = "/Users/lukechang/dev/GOAnnotationGenerator/log"
+log = "/Users/luke/dev/baderlab/OAnnotationGenerator/log"
 
 # Provide names of networks to use when querying GeneMANIA
 # Refer to http://pages.genemania.org/tools/#available-networks for 
@@ -50,13 +53,13 @@ weighting = "automatic"
 folds = "5"
 
 # Provide the path to the sqlite summary used to generate GeneMANIA stats
-summary_path = "/Users/lukechang/dev/dependencies/summary.sqlite"
+summary_path = "/Users/luke/dev/baderlab/dependencies/summary.sqlite"
 
 # Provide the path to a GeneOntology obo-xml.gz file.
-go_file = "/Users/lukechang/dev/dependencies/go_daily-termdb.obo-xml.gz"
+go_file = "/Users/luke/dev/baderlab/dependencies/go_daily-termdb.obo-xml.gz"
 
 # Provide the path to a AnnotationCorpus for Humans.
-ac_file = "/Users/lukechang/dev/dependencies/gene_association.goa_human"
+ac_file = "/Users/luke/dev/baderlab/dependencies/gene_association.goa_human"
 
 # Set weights for confidence scores
 semsim_weight = 0.15

@@ -39,10 +39,3 @@ fav, semsim_input, rem = intersect_filter(unfiltered_preds)
 semsim_scored = semsim_score(semsim_input)
 final_preds = weight_scores(semsim_scored, rem)
 output_annos_log_form(final_preds)
-
-
-# run queries in QueryRunner
-
-# threshold results
-
-# produce composite confidence scores and filter

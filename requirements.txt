@@ -2,6 +2,5 @@ pandas
 sh
 mysql-python
 httplib2
-json
 numpy
 
