@@ -10,7 +10,6 @@
 # 
 # Bader Lab @ The University of Toronto
 ##########################################################################
-# Add debug message
 import os
 
 import sh
