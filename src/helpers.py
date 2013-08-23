@@ -23,13 +23,12 @@ javacmd = sh.java.bake(settings.mem, '-cp', settings.jar)
 
 # Connects to and executes a query into AMIGO db.
 def execute_sql(query):
-	db = MySQLdb.connect(host = "mysql.ebi.ac.uk", user = "go_select",
-		passwd = "amigo", port = 4085, db = "go_latest")
-	cursor = db.cursor()
-	cursor.execute(query)
-	rows = cursor.fetchall()
-	db.close()
-	return rows
+    db = MySQLdb.connect(user = "root", db = "GO")
+    cursor = db.cursor()
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    db.close()
+    return rows
 
 # Strips content from a list/tuple of unary tuples.
 def strip_unary_tuple(t):

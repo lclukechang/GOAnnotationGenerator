@@ -9,10 +9,13 @@
 # 
 # Bader Lab @ The University of Toronto
 ##########################################################################
-    
+
     ##
     # NOTE: Please use ABSOLUTE paths in this settings file!
    ##
+
+# Define a GO database connection to use for MySQL queries.
+
 
 # Path to the GeneMANIA JVM JAR file (command-line tools)
 jar = "/Users/lukechang/dev/dependencies/cmd.jar"
