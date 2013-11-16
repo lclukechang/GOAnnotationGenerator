@@ -45,7 +45,7 @@ class GO_Term:
             networks, '100', weighting]
         f.write("\n".join(content))
         f.close()
-        self.pred_path = self.querypath + "-results.scores.txt"
+        self.pred_path = "%s.query-results.scores.txt" % os.path.join(scorecache, self.file_name)
 
 class QuerySet:
     def __init__(self, members):

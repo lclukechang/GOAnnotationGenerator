@@ -23,7 +23,8 @@ javacmd = sh.java.bake(settings.mem, '-cp', settings.jar)
 
 # Connects to and executes a query into AMIGO db.
 def execute_sql(query):
-    db = MySQLdb.connect(user = "root", db = "GO")
+    db = MySQLdb.connect(host= "mysql.ebi.ac.uk", user = "go_select", passwd="amigo", port = 4085,
+        db = "go_latest")
     cursor = db.cursor()
     cursor.execute(query)
     rows = cursor.fetchall()
@@ -113,7 +114,7 @@ def import_func_preds(path):
 	d = {}
 	for l in lines:
 		cols = l.rstrip().split()
-		if cols[1] is not "null":
+		if cols[1] != "null":
 			d[cols[0]] = cols[1]
 	return d
 

@@ -14,30 +14,27 @@
     # NOTE: Please use ABSOLUTE paths in this settings file!
    ##
 
-# Define a GO database connection to use for MySQL queries.
-
-
 # Path to the GeneMANIA JVM JAR file (command-line tools)
-jar = "/Users/luke/dev/baderlab/dependencies/cmd.jar"
+jar = "/Users/luke/dev/projects/baderlab/dependencies/cmd.jar"
 
 # Path to a GeneMANIA network dataset to use for predictions
-data = "/Users/luke/dev/baderlab/dependencies/datasource"
+data = "/Users/luke/dev/projects/baderlab/dependencies/datasource"
 
 # Amount of memory to allocate JVM when executing GeneMANIA tools
-mem = "-Xmx2500m"
+mem = "-Xmx4000m"
 
 # For multi-core systems, set to maximum number of physical cores
-threads = "2"
+threads = "8"
 
 # Provide a path to store intermediate query files during runtime
-querycache = "/Users/luke/dev/baderlab/OAnnotationGenerator/.querycache"
+querycache = "/Users/luke/dev/projects/baderlab/GOAnnotationGenerator/.querycache"
 
 # Provide a path to store intermediate score files during runtime
 # NOTE: This cannot be identical to the querycache path!
-scorecache = "/Users/luke/dev/baderlab/OAnnotationGenerator/.scorecache"
+scorecache = "/Users/luke/dev/projects/baderlab/GOAnnotationGenerator/.scorecache"
 
 # Provide a path to store log files
-log = "/Users/luke/dev/baderlab/OAnnotationGenerator/log"
+log = "/Users/luke/dev/projects/baderlab/OAnnotationGenerator/log"
 
 # Provide names of networks to use when querying GeneMANIA
 # Refer to http://pages.genemania.org/tools/#available-networks for 
@@ -53,13 +50,18 @@ weighting = "automatic"
 folds = "5"
 
 # Provide the path to the sqlite summary used to generate GeneMANIA stats
-summary_path = "/Users/luke/dev/baderlab/dependencies/summary.sqlite"
+summary_path = "/Users/luke/dev/projects/baderlab/dependencies/summary.sqlite"
+
+# Provide the path to results from functional enrichment predictions for
+# unannotated genes
+sing_preds_path =
+"/Users/luke/dev/projects/baderlab/GOAnnotationGenerator/src/functional_enrichment/20related_nospd_nonondefaultpredict.txt"
 
 # Provide the path to a GeneOntology obo-xml.gz file.
-go_file = "/Users/luke/dev/baderlab/dependencies/go_daily-termdb.obo-xml.gz"
+go_file = "/Users/luke/dev/projects/baderlab/dependencies/go_daily-termdb.obo-xml.gz"
 
 # Provide the path to a AnnotationCorpus for Humans.
-ac_file = "/Users/luke/dev/baderlab/dependencies/gene_association.goa_human"
+ac_file = "/Users/luke/dev/projects/baderlab/dependencies/gene_association.goa_human"
 
 # Set weights for confidence scores
 semsim_weight = 0.15

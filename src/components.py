@@ -26,7 +26,7 @@ from classes import *
 
 # Retrieve all query GO terms.
 def build_queryfiles():
-    terms = execute_sql(goterm_sql)
+    terms = execute_sql(goterm_sql)[:3] #TODO: remove debugging stuff here
     print ["Diagnostic: there are %d terms" % len(terms)]
     term_objs = []
     print "[Building queryfiles...]"
@@ -68,7 +68,7 @@ def queryset_threshold(term_objs):
     mean = descending[["AUC-ROC"]].mean().loc["AUC-ROC"]
 
     # Create filter in form of dictionary for AUC-ROC scores.
-    screen = descending[descending["AUC-ROC"] > mean]
+    screen = descending[descending["AUC-ROC"] >= mean]
     d = {}
     for i, row in screen.iterrows():
         d[row["queryIdentifier"]] = row["AUC-ROC"]
@@ -88,10 +88,10 @@ def run_queries(term_objs):
     # Split terms into cycles of size n.
     n = pow(int(settings.threads), 3)
     terms = splitarray(term_objs, n)
-    for i in range(1, len(terms)):
+    for i, cycle in enumerate(terms):
         # Produce querypath list.
-        paths = [term.querypath for term in terms[i]]
-        print "[Invoking QueryRunner: cycle %d of %d]" % (i, len(terms))
+        paths = [term.querypath for term in cycle]
+        print "[Invoking QueryRunner: cycle %d of %d]" % (i + 1, len(terms))
         queryrunner = javacmd('org.genemania.plugin.apps.QueryRunner',
                               '--data', settings.data, '--threads', settings.threads,
                               '--out', 'scores', '--results', settings.scorecache, paths)
@@ -142,9 +142,10 @@ def intersect_filter(predictions):
     ret = sh.sqlite3(settings.summary_path, _in=unannotated_genes)
     querypath = os.path.join(settings.querycache, "unknown_genes.query")
     f = open(querypath, "w")
-    f.write(ret.stdount)
+    f.write(ret.stdout)
     f.close()
 
+    """
     # Compute single gene predictions.
     print "[Computing functional enrichment predictions for \
             cross-checking and filtering...]"
@@ -158,9 +159,10 @@ def intersect_filter(predictions):
             "-netids", "all", "numrelated", "20", "-log",
             os.path.join(settings.log, "func_enrich_log.txt"))
     sh.rm(querypath)
+    """
 
     # Load functional enrichment predictions as dictionary and filter.
-    screen = import_func_preds(resultpath)
+    screen = import_func_preds(settings.sing_preds_path)
     favourable, semsim, remaining = [], [], []
     for pred in predictions:
         try:
@@ -191,18 +193,21 @@ def semsim_score(pairs):
     TermSemSimClass = SemSimMeasures.selectTermSemSim("Resnik")
     TSS = TermSemSimClass(ac, go)
     TSS.setSanityCheck(True)
-    scored = []
-    det_max = []
+    scored, det_max, nulls = [], [], []
     for pred, sing_pred in pairs:
-        pred.score = (TSS.SemSim(pred.term.acc, sing_pred) *
-                      settings.semsim_weight)
-        scored.append(pred)
-        det_max.append(pred.score)
+        raw_score = TSS.SemSim(pred.term.acc, sing_pred)
+        # Handle cases where different ontologies are pitted against each other.
+        if raw_score is None:
+            nulls.append(pred)
+        else:
+            pred.score = raw_score * settings.semsim_weight
+            scored.append(pred)
+            det_max.append(pred.score)
         # Normalize semsim scores
     maxscore = np.max(np.array(det_max))
     for pred in scored:
         pred.score /= maxscore
-    return scored
+    return scored, nulls
 
 # Compute weighted confidence scores.
 def weight_scores(semsim_scored, rem):
@@ -215,11 +220,19 @@ def weight_scores(semsim_scored, rem):
         weighted.append(pred)
     return weighted
 
-
-def output_annos_log_form(final_preds):
-    f = open("./test", "w")
+def output_annos_log_form(final_preds, outdir):
+    f = open(os.path.join(outdir, "%s-func_pred_scores.csv" % datetime.datetime.now().strftime("%Y%m%d")), "w")
     f.write("Gene\tGO:ACC\tName\tConfidence Score\n")
     for pred in final_preds:
         f.write("%s\t%s\t%s\t%s\n" %
                 (pred.gene, pred.term.acc, pred.term.name, pred.score))
     f.close()
+
+def output_annos_gaf(final_preds, outdir):
+    fname = os.path.join(outdir, "%s-func_preds.goa_human" % datetime.datetime.now().strftime("%Y%m%d"))
+    for pred in final_preds:
+        go_id = pred.term.acc
+        dat = helpers.uniprot_info(pred.gene)
+
+    output.write_to_file(fname)
+

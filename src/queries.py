@@ -11,7 +11,7 @@
 ##########################################################################
 
 # retrieves all GO Terms with where # of annotated genes >= lower_bound
-lower_bound = 50
+lower_bound = 10
 goterm_sql = """SELECT term.name, term.acc, term.term_type FROM term
  INNER JOIN association ON(term.id=association.term_id)
  INNER JOIN gene_product ON(association.gene_product_id=gene_product.id)
