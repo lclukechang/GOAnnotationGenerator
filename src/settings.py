@@ -20,6 +20,9 @@ jar = "/Users/luke/dev/projects/baderlab/dependencies/cmd.jar"
 # Path to a GeneMANIA network dataset to use for predictions
 data = "/Users/luke/dev/projects/baderlab/dependencies/datasource"
 
+# Path to engine-progs jar
+eng_jar = 
+
 # Amount of memory to allocate JVM when executing GeneMANIA tools
 mem = "-Xmx4000m"
 

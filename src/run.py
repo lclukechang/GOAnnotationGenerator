@@ -42,7 +42,7 @@ run_queries(filtered_by_crossval)
 unfiltered_preds = produce_annos(filtered_by_crossval)
 fav, semsim_input, rem = intersect_filter(unfiltered_preds)
 semsim_scored, nulls = semsim_score(semsim_input)
-final_preds = weight_scores(semsim_scored, rem + nulls)
+final_preds = weight_scores(semsim_scored, rem + nulls) + fav
 output_annos_gaf(final_preds)
 if args.scores:
     output_annos_log_form(final_preds)

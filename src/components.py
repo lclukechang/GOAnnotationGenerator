@@ -26,7 +26,7 @@ from classes import *
 
 # Retrieve all query GO terms.
 def build_queryfiles():
-    terms = execute_sql(goterm_sql)[:3] #TODO: remove debugging stuff here
+    terms = execute_sql(goterm_sql) #TODO: remove debugging stuff here
     print ["Diagnostic: there are %d terms" % len(terms)]
     term_objs = []
     print "[Building queryfiles...]"
